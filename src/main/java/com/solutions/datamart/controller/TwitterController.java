@@ -1,5 +1,7 @@
 package com.solutions.datamart.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(TwitterController.TWITTER_BASE_URL)
 public class TwitterController {
 	
-	public static final String TWITTER_BASE_URL = "svc/v1/tweets";
+	public static final String TWITTER_BASE_URL = "svc/v1";
 
 	@Autowired
 	private Twitter twitter;
 
 	
-	@RequestMapping(value ="{userName}&result_type=recent&tweet_mode=extended")
-	public List<Tweet> getTweets(@PathVariable final String userName ){
+	@RequestMapping("/tweets")
+	public List<Tweet> getTweets(){
 		
-		//return twitter.searchOperations().search(hashTag).getTweets();
-		return twitter.timelineOperations().getUserTimeline(userName);
+		String[] usersArray =  {"martinplaut","RAbdiAnalyst","TsedaleLemma","meazaG_"};
+		List<String> usersList = Arrays.asList(usersArray);
 		
+		List<Tweet> tweets = new ArrayList<>();
+		
+		for(String user : usersList) {
+			List<Tweet> tweetsL = new ArrayList<>();
+			tweetsL  = twitter.timelineOperations().getUserTimeline(user);
+			tweets.addAll(tweetsL);
+		}
+		return tweets;
 	}
 	
 }
