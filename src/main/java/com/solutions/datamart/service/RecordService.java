@@ -4,5 +4,7 @@ import com.solutions.datamart.model.Media;
 
 public interface RecordService {
 
-	public long createRecord(Media media);
+	public void createRecord(Media media);
+	
+	public void getAllMedias();
 }

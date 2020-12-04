@@ -35,8 +35,7 @@ public class Record extends AuditUserDate implements Serializable {
 	private String description;
 	@Column
 	private String content;
-	@Column
-	private Date date;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	@JoinColumn(name = "mediaId", nullable = true)
 	private Media media;

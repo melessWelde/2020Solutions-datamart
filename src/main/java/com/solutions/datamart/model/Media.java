@@ -35,8 +35,7 @@ public class Media extends AuditUserDate implements Serializable {
 	private String language;
 	@Column
 	private String country;
-	@Column
-	private boolean crawel;
+
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "media", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REMOVE })
 	private Set<Record> record = new HashSet<>();
