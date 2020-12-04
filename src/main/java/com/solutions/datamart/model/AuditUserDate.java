@@ -36,10 +36,10 @@ public abstract class AuditUserDate implements Serializable {
 	protected Long id;
 
 	@CreatedBy
-	@Column(name = "createdBy", nullable = false, updatable = false)
+	@Column(name = "createdBy", nullable = true, updatable = false)
 	protected String createdBy;
 
-	@Column(name = "createdDate", nullable = false, updatable = false)
+	@Column(name = "createdDate", nullable = true, updatable = false)
 	@CreatedDate
 	@Temporal(TemporalType.TIMESTAMP)
 	protected Date createdDate;
