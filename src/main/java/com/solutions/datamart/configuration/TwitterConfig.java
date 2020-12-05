@@ -1,9 +1,12 @@
 package com.solutions.datamart.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.social.twitter.api.impl.TwitterTemplate;
+import org.springframework.web.client.RestTemplate;
+
+import com.solutions.datamart.service.TwitterModification;
 
 @Configuration
 public class TwitterConfig {
@@ -16,8 +19,12 @@ public class TwitterConfig {
 	@Value("${twitter.access.token.secret}")
 	private String accessTokenSecret;
 	@Bean
-	TwitterTemplate getTwtTemplate(){
-		return new TwitterTemplate(consumerKey, consumerSecret, accessToken, accessTokenSecret);
+	TwitterModification twitterModification(){
+		return new TwitterModification(consumerKey, consumerSecret, accessToken, accessTokenSecret);
 	}
 
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) {
+		return builder.build();
+	}
 }
