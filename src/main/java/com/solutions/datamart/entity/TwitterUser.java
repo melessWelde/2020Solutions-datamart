@@ -26,4 +26,6 @@ public class TwitterUser implements Serializable{
 	private String description;
 	
 	private String userUrl;
+	
+	private String imageUrl;
 }

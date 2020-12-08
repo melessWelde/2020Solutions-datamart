@@ -3,6 +3,7 @@ package com.solutions.datamart.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Temporal;
@@ -12,11 +13,12 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Tweet implements Serializable{
+public class TweetEntity implements Serializable{
 
 	@Id
-	private long tweetId;
+	private Long tweetId;
 	
+	@Column(length = 2000)
 	private String tweetText;
 	
 	@Temporal(TemporalType.TIMESTAMP)
@@ -24,11 +26,12 @@ public class Tweet implements Serializable{
 	
 	private String hashTags;
 	
-	private int retweetCount;
+	private Integer retweetCount;
 	
-	private int favouriteCount;
+	private Integer favouriteCount;
 	
 	private String tweetUrl;
-	
+
+	private String userName;
 	
 }

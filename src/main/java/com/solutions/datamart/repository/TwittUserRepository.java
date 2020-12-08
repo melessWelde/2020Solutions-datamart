@@ -3,9 +3,9 @@ package com.solutions.datamart.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.solutions.datamart.entity.Tweet;
+import com.solutions.datamart.entity.TwitterUser;
 
 @Repository
-public interface TwittUserRepository extends JpaRepository<Tweet, Long>{
+public interface TwittUserRepository extends JpaRepository<TwitterUser, Long>{
 
 }
