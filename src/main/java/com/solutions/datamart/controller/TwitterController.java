@@ -51,40 +51,8 @@ public class TwitterController {
 	@Autowired
 	private UserProfileService userProfileService;
 	
-//	url:https://api.twitter.com/1.1/search/tweets.json?q=%23tigray&result_type=recent&tweet_mode=extended
 	private static final String GET_TWITT_BY_HASHTAG = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=martinplaut&retweet_status=false&tweet_mode=extended&q=%23tigray";
 	
-//	@RequestMapping("/tweets")
-//	public List<TweeterModel> getTweets(){
-//		//PathVariable pv = new PathVariable();
-//		String[] usersArray = {"martinplaut","RAbdiAnalyst","TsedaleLemma","meazaG_"};
-//		List<String> usersList = Arrays.asList(usersArray);
-//		
-//		List<Tweet> tweets = new ArrayList<>();
-//		List<TweeterModel> allTweets = new ArrayList<>();
-//		//modifiedTimelineOperation.setUserAuthorized(false);
-//		
-//		//modifiedTimelineOperation.setAppAuthorized(true);
-//		for(String user : usersList) {
-//			List<Tweet> tweetsL = new ArrayList<>();
-//			tweetsL = twitter.timelineOperations().getUserTimeline(user);
-//			//tweetsL = twitter.timelineOperations().getStatus();
-//			//twitter.timelineOperations().getStatus();
-//			tweets.addAll(tweetsL);
-//		}
-//		
-//		for(Tweet t : tweets) {
-//			TweeterModel tm = new TweeterModel();
-//			tm.setCreated_ts(t.getCreatedAt());
-//			tm.setTweet_text(t.getText());
-//			tm.setUser(t.getFromUser());
-//			tm.setAllHashtags(t.getEntities().getHashTags());
-//			tm.setRetweetCount(t.getRetweetCount());
-//			tm.setFollowerCount(t.getUser().getFollowersCount());
-//			allTweets.add(tm);
-//		}
-//		return allTweets;
-//	}
 	
 	@RequestMapping(value = "/tweets", method = RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_VALUE)
 	public String getAllTwitsByHashTag() {

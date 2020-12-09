@@ -1,6 +1,7 @@
 package com.solutions.datamart.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,8 +112,50 @@ public class TweetServiceImpl implements TweetService {
 		return tweetE;
 	}
 
-	private String buildUrl(String screenNames) {
+	private String buildUrl(String screenName) {
 
-		return GET_TWITT_BASE_URL + screenNames + TWEET_PARAMS;
+		return GET_TWITT_BASE_URL + screenName + TWEET_PARAMS;
+	}
+
+	@Override
+	public List<TweetEntity> getAllLatestTweets() {
+		List<TweetEntity> tweets =tweetRepository.getAllLatestTweets();
+		return tweets;
+	}
+
+	@Override
+	public List<TweetEntity> getAllTweetsByUser(String userName) {
+		return tweetRepository.getAllTweetsByUser(userName);
+	}
+
+	@Override
+	public List<TweetEntity> getAllTweetsByHashTag(String hashText) {
+		return tweetRepository.getAllTweetsByHashTag(hashText);
+	}
+
+	@Override
+	public List<TweetEntity> getAllTweetsByNameAndHashTag(String userName, String hashText) {
+		return tweetRepository.getAllTweetsByNameAndHashTag(userName, hashText);
+	}
+
+	@Override
+	public List<TweetEntity> getAllTweetsByNameHashAndDate(String userName, String hashText, Date from, Date toDate) {
+		return tweetRepository.getAllTweetsByNameHashAndDate(userName, hashText, from, toDate);
+	}
+
+	@Override
+	public List<TweetEntity> getAllTweetsByUserAndDate(String userName, Date fromDate, Date toDate) {
+		return tweetRepository.getAllTweetsByUserAndDate(userName, fromDate, toDate);
+	}
+
+	@Override
+	public List<TweetEntity> getAllTweetsByHashTagAndDate(String hashText, Date fromDate, Date toDate) {
+		return tweetRepository.getAllTweetsByHashTagAndDate(hashText, fromDate, toDate);
+	}
+
+	@Override
+	public List<TweetEntity> getAllTweetsByDate(Date fromDate, Date toDate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
