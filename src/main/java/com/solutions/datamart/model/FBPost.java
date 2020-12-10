@@ -1,24 +1,29 @@
 package com.solutions.datamart.model;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.sql.Blob;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "facebook_posts")
-public class FBPost {
+@Table(name = "FBPost")
+public class FBPost extends AuditUserDate implements Serializable {
+	
 	@Column
-	private String id;
-	@Column
-	private Date createdTime;
-	@Column
+	private String facebookId;
+//	@Column
+//	@Temporal(TemporalType.DATE)
+//	private Date createdTime;
+	
+	@Column(length = 5000)
 	private String message;
-	@Column
+	@Column(length = 5000)
 	private String description;
 	@Column
 	private String link;
