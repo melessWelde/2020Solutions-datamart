@@ -22,7 +22,6 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solutions.datamart.entity.TweetEntity;
-import com.solutions.datamart.entity.TwitterUser;
 import com.solutions.datamart.model.HashTagEntity;
 import com.solutions.datamart.model.TweetModel;
 import com.solutions.datamart.repository.TweetRepository;
@@ -35,9 +34,6 @@ public class TwitterController {
 	public static final String TWITTER_BASE_URL = "svc/v1";
 	
 	private static final String TWITTER_HOME_URL="https://twitter.com/";
-
-//	@Autowired
-//	private TwitterModification twitter;
 
 	@Autowired
 	private RestTemplate restTemplate;
