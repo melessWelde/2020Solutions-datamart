@@ -9,10 +9,12 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Data
+@Builder
 public class TweetEntity implements Serializable{
 
 	@Id
