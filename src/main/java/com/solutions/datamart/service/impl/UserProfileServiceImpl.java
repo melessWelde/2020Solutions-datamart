@@ -76,4 +76,27 @@ public class UserProfileServiceImpl implements UserProfileService {
 		return screenNames;
 	}
 
+	@Override
+	public TwitterProfile saveUserProfile(String screenName) {
+		TwitterProfile t = twitterTemplate.userOperations().getUserProfile(screenName);
+		try {
+			TwitterUser userProfile = new TwitterUser();
+			if (null != t) {
+				userProfile.setName(t.getName());
+				userProfile.setScreenName(t.getScreenName());
+				userProfile.setUserUrl(t.getProfileUrl());
+				userProfile.setDescription(t.getDescription());
+				userProfile.setUserId(t.getId());
+				userProfile.setLocation(t.getLocation());
+				userProfile.setImageUrl(t.getProfileImageUrl());
+			} else {
+				return null;
+			}
+			twittUserRepository.save(userProfile);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return t;
+	}
 }

@@ -95,8 +95,7 @@ public class TwitterController {
 
 	@GetMapping("/twitterProfile/{userName}")
 	public TwitterProfile getTwitterProfile(@PathVariable("userName") String userName) {
-
-		return twitterTemplate.userOperations().getUserProfile(userName);
+		return userProfileService.saveUserProfile(userName);
 	}
 
 	@PostMapping("/twitterProfile")

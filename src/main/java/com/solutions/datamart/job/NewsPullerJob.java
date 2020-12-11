@@ -21,7 +21,7 @@ public class NewsPullerJob {
 	@Autowired
 	private MediaService mediaService;
 
-	@Scheduled(fixedRate = 60 * 1000, initialDelay = 1000)
+	@Scheduled(fixedRate = 180 * 60000, initialDelay = 240000)
 	public void saveNews() {
 		recordService.getAllMedias();
 	}
