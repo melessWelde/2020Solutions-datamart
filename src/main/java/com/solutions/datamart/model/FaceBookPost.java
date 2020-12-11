@@ -12,15 +12,10 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "FBPost")
-public class FBPost extends AuditUserDate implements Serializable {
+public class FaceBookPost extends AuditUserDate implements Serializable {
 	
 	@Column
 	private String facebookId;
-//	@Column
-//	@Temporal(TemporalType.DATE)
-//	private Date createdTime;
-	
 	@Column(length = 5000)
 	private String message;
 	@Column(length = 5000)

@@ -1,10 +1,13 @@
 package com.solutions.datamart.service;
 
+import com.solutions.datamart.dto.UserProfile;
+import com.solutions.datamart.dto.UserProfileResponse;
+
 import java.util.List;
 
 public interface UserProfileService {
 
-	public String saveUerProfile(String screenName);
-	
-	public List<String> getAllScreenNames();
+	UserProfileResponse saveUerProfile(UserProfile screenName);
+
+	List<String> getAllScreenNames();
 }
