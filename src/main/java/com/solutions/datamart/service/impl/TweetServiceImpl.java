@@ -1,9 +1,18 @@
 package com.solutions.datamart.service.impl;
 
-import java.util.*;
+import static com.solutions.datamart.util.Constants.AND;
+import static com.solutions.datamart.util.Constants.AUTH;
+import static com.solutions.datamart.util.Constants.EXCEPTION_MESSAGE;
+import static com.solutions.datamart.util.Constants.PARAMS;
+import static com.solutions.datamart.util.Constants.SPLIT;
+import static com.solutions.datamart.util.Constants.STATUS_PATH;
 
-import com.solutions.datamart.configuration.TwitterProperties;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,9 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.solutions.datamart.configuration.TwitterProperties;
 import com.solutions.datamart.entity.TweetEntity;
 import com.solutions.datamart.model.HashTagEntity;
 import com.solutions.datamart.model.TweetModel;
@@ -24,7 +32,7 @@ import com.solutions.datamart.service.HashTagService;
 import com.solutions.datamart.service.TweetService;
 import com.solutions.datamart.service.UserProfileService;
 
-import static com.solutions.datamart.util.Constants.*;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service("tweetService")
@@ -38,6 +46,7 @@ public class TweetServiceImpl implements TweetService {
 	private UserProfileService userProfileService;
 	private HashTagService hashTagService;
 
+	private List<String> hashTexts= new ArrayList<>();
 
 	@Autowired
 	public TweetServiceImpl(RestTemplate restTemplate, TwitterProperties properties, ObjectMapper objectMapper, TweetRepository tweetRepository, UserProfileService userProfileService, HashTagService hashTagService) {
@@ -51,7 +60,7 @@ public class TweetServiceImpl implements TweetService {
 
 	public void createTweetsRecord() {
 		ResponseEntity<String> result;
-
+		  hashTexts = hashTagService.getHashTags();
 		for (String screenName : userProfileService.getAllScreenNames()) {
 			result = restTemplate.exchange(buildUrl(screenName), HttpMethod.GET, getHttpEntity(), String.class);
 			List<TweetEntity> tweets = getListOfTweet(result.getBody());
@@ -73,8 +82,8 @@ public class TweetServiceImpl implements TweetService {
 	}
 
 	private boolean isHashTag(TweetEntity tweetEntity) {
-		List<String> hashTag = new ArrayList<>(Arrays.asList(tweetEntity.getHashTags().split(SPLIT)));
-		return hashTagService.getHashTags().containsAll(hashTag);
+		
+		return hashTexts.stream().anyMatch(s -> tweetEntity.getTweetText().contains(s));
 	}
 
 	private List<TweetEntity> getListOfTweet(String json) {

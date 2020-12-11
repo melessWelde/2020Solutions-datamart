@@ -14,7 +14,7 @@ public class TwitterPullerJob {
 	@Autowired
 	private TweetService tweetService;
 	
-	@Scheduled(fixedRate = 60 * 1000, initialDelay = 1000)
+	@Scheduled(fixedRate = 60 * 60000, initialDelay = 60000)
 	public void saveTweets() {
 		tweetService.createTweetsRecord();
 	}
