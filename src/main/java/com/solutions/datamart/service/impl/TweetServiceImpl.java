@@ -1,9 +1,9 @@
 package com.solutions.datamart.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+import com.solutions.datamart.configuration.TwitterProperties;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,97 +24,97 @@ import com.solutions.datamart.service.HashTagService;
 import com.solutions.datamart.service.TweetService;
 import com.solutions.datamart.service.UserProfileService;
 
+import static com.solutions.datamart.util.Constants.*;
+
+@Slf4j
 @Service("tweetService")
 @Transactional
 public class TweetServiceImpl implements TweetService {
 
-	private static final String TWITTER_HOME_URL = "https://twitter.com/";
-
-	private static final String GET_TWITT_BASE_URL = "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=";
-
-	private static final String TWEET_PARAMS = "&retweet_status=false&tweet_mode=extended";
-	@Autowired
 	private RestTemplate restTemplate;
-
-	@Autowired
-	TweetRepository tweetRepository;
-
-	@Autowired
+	private TwitterProperties properties;
+	private ObjectMapper objectMapper;
+	private TweetRepository tweetRepository;
 	private UserProfileService userProfileService;
-
-	@Autowired
 	private HashTagService hashTagService;
 
+
+	@Autowired
+	public TweetServiceImpl(RestTemplate restTemplate, TwitterProperties properties, ObjectMapper objectMapper, TweetRepository tweetRepository, UserProfileService userProfileService, HashTagService hashTagService) {
+		this.restTemplate = restTemplate;
+		this.properties = properties;
+		this.objectMapper = objectMapper;
+		this.tweetRepository = tweetRepository;
+		this.userProfileService = userProfileService;
+		this.hashTagService = hashTagService;
+	}
+
 	public void createTweetsRecord() {
-		HttpHeaders headers = new HttpHeaders();
+		ResponseEntity<String> result;
 
-		headers.add("Authorization",
-				"Bearer AAAAAAAAAAAAAAAAAAAAAPErJwEAAAAAaVaHf%2FebQpB%2BxZ8P8SfrYu1dmJQ%3DTYaWglF2ULQYNUDa09rYhCzFx4Zr6kNZrLVEOWBBrJBWmDK560");
-
-		HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
-		ResponseEntity<String> result = null;
 		for (String screenName : userProfileService.getAllScreenNames()) {
-			result = restTemplate.exchange(buildUrl(screenName), HttpMethod.GET, entity, String.class);
+			result = restTemplate.exchange(buildUrl(screenName), HttpMethod.GET, getHttpEntity(), String.class);
+			List<TweetEntity> tweets = getListOfTweet(result.getBody());
+			List<TweetEntity> finalTweets = new ArrayList<>();
+			tweets.stream().filter(Objects::nonNull)
+					.filter(this::isHashTag)
+					.forEach(o -> finalTweets.add(o));
 
-			ObjectMapper objectMapper = new ObjectMapper();
-			objectMapper.setVisibility(PropertyAccessor.ALL, Visibility.NONE);
-			objectMapper.setVisibility(PropertyAccessor.FIELD, Visibility.ANY);
-			objectMapper.setVisibility(PropertyAccessor.CREATOR, Visibility.ANY);
-			String json = result.getBody();
-			TweetModel[] model = null;
-			List<TweetEntity> tweet = new ArrayList<>();
-			try {
-				model = objectMapper.readValue(json, TweetModel[].class);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-
-			for (TweetModel tweetM : model) {
-				for (String hashText : hashTagService.getHashTags()) {
-					if (null != tweetM.getRetweetedStatus()) {
-						if (!tweetM.getRetweetedStatus().getText().contains(hashText)) {
-							continue;
-						}
-					} else if (!tweetM.getText().contains(hashText)) {
-						continue;
-					} else {
-						TweetEntity tweetE = buildTweetObject(tweetM);
-						tweet.add(tweetE);
-						break;
-					}
-				}
-
-			}
-			if (!tweet.isEmpty()) {
-				tweetRepository.saveAll((tweet));
+			if (!finalTweets.isEmpty()) {
+				tweetRepository.saveAll((finalTweets));
 			}
 		}
+	}
+
+	private HttpEntity<String> getHttpEntity() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(AUTH, properties.getHeader());
+		return new HttpEntity<>(PARAMS, headers);
+	}
+
+	private boolean isHashTag(TweetEntity tweetEntity) {
+		List<String> hashTag = new ArrayList<>(Arrays.asList(tweetEntity.getHashTags().split(SPLIT)));
+		return hashTagService.getHashTags().containsAll(hashTag);
+	}
+
+	private List<TweetEntity> getListOfTweet(String json) {
+		List<TweetEntity> tweets = new ArrayList<>();
+		try {
+			TweetModel[] model = objectMapper.readValue(json, TweetModel[].class);
+			for (TweetModel tweetM : model) {
+				TweetEntity tweetE = buildTweetObject(tweetM);
+				tweets.add(tweetE);
+			}
+		} catch (Exception e) {
+			log.error(EXCEPTION_MESSAGE, "parsing twitter response ","getListOfTweet", e.getMessage(), e.getCause());
+		}
+		return tweets;
+
 	}
 
 	private TweetEntity buildTweetObject(TweetModel tweetM) {
-		StringBuffer hashTags = new StringBuffer();
-		TweetEntity tweetE = new TweetEntity();
-		tweetE.setCreatedDt(tweetM.getCreatedAt());
-		tweetE.setFavouriteCount(tweetM.getFavoriteCount());
-		tweetE.setTweetId(tweetM.getId());
-		tweetE.setTweetText(tweetM.getText());
-		tweetE.setRetweetCount(tweetM.getRetweetCount());
-
-		for (HashTagEntity hashTag : tweetM.getEntities().getTags()) {
-			hashTags.append(hashTag.getText()).append(", ");
-		}
-		tweetE.setHashTags(hashTags.toString());
-		tweetE.setUserName(tweetM.getUser().getName());
-		if (null != tweetM.getRetweetedStatus()) {
-			tweetE.setTweetText(tweetM.getRetweetedStatus().getText());
-		}
-		tweetE.setTweetUrl(TWITTER_HOME_URL + tweetM.getUser().getScreenName() + "/status/" + tweetM.getId());
-		return tweetE;
+		return TweetEntity.builder()
+				.createdDt(tweetM.getCreatedAt())
+				.favouriteCount(tweetM.getFavoriteCount())
+				.tweetId(tweetM.getId())
+				.tweetText(null != tweetM.getRetweetedStatus() ? tweetM.getRetweetedStatus().getText() : tweetM.getText())
+				.retweetCount(tweetM.getRetweetCount())
+				.hashTags(getHashTag(tweetM))
+				.userName(tweetM.getUser().getName())
+				.tweetUrl(properties.getHome_url() + tweetM.getUser().getScreenName() + STATUS_PATH + tweetM.getId())
+				.build();
 	}
 
-	private String buildUrl(String screenName) {
+	private String getHashTag(TweetModel tweetM) {
+		StringBuffer hashTags = new StringBuffer();
+		for (HashTagEntity hashTag : tweetM.getEntities().getTags()) {
+			hashTags.append(hashTag.getText()).append(SPLIT);
+		}
+		return hashTags.toString();
+	}
 
-		return GET_TWITT_BASE_URL + screenName + TWEET_PARAMS;
+	private String buildUrl(String screenNames) {
+		return properties.getUrl() + screenNames + AND + properties.getParam();
 	}
 
 	@Override
