@@ -1,5 +1,5 @@
 # datamart-solutions
-#TRRR
-Actuator path: /actuator/health
 
 new changes
+
+Amanuel have added this
