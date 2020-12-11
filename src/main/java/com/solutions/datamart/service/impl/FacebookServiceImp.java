@@ -27,7 +27,7 @@ public class FacebookServiceImp implements FacebookService {
 	
 	Facebook facebook;
 
-	@Scheduled(fixedRate = 100000)
+	@Scheduled(fixedRate = 120 * 60000, initialDelay = 120000)
 	public void getPosts() {
 		try {
 			if(facebook == null)
