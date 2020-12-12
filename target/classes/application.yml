@@ -1,6 +1,0 @@
-service:
-  twitter:
-    header: Bearer AAAAAAAAAAAAAAAAAAAAAPErJwEAAAAAaVaHf%2FebQpB%2BxZ8P8SfrYu1dmJQ%3DTYaWglF2ULQYNUDa09rYhCzFx4Zr6kNZrLVEOWBBrJBWmDK560
-    url: https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=
-    param: retweet_status=false&tweet_mode=extended
-    home_url: https://twitter.com/
