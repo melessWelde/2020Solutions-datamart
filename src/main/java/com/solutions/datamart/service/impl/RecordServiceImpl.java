@@ -75,7 +75,7 @@ public class RecordServiceImpl implements RecordService {
 						record = new Record();
 						record.setTitle(entry.getTitle());
 						record.setLink(entry.getLink());
-						// record.setDescription(entry.getDescription().toString());
+						record.setDescription(entry.getDescription().toString());
 						record.setCreatedDate(entry.getPublishedDate());
 						record.setUpdatedDate(entry.getUpdatedDate());
 
