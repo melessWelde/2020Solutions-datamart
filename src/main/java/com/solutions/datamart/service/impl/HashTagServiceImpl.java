@@ -35,4 +35,15 @@ public class HashTagServiceImpl implements HashTagService{
 		return hashTexts;
 	}
 
+	@Override
+	public void deleteHashTag(int id) {
+		hashTagRepository.deleteById(id);
+		
+	}
+
+	@Override
+	public List<HashTag> getAllHashTags() {
+		return hashTagRepository.findAll();
+	}
+
 }
