@@ -8,7 +8,8 @@ public class Constants {
     public static final String PARAMS = "parameters";
 
     //Message
-    public static final String USER_SAVE_SUCCESSFULLY =  "User Profile successfully saved!";
+    public static final String USER_SAVED_SUCCESSFULLY =  "User Profile successfully saved!";
+    public static final String USER_DELETED_SUCCESSFULLY =  "User Profile successfully saved!";
     public static final String USER_DOES_NOT_EXIST=  "user profile doesn't exist with this screenName. please provide correct one";
 
     //log message

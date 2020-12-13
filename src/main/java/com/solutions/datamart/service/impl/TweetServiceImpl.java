@@ -8,7 +8,6 @@ import static com.solutions.datamart.util.Constants.SPLIT;
 import static com.solutions.datamart.util.Constants.STATUS_PATH;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
