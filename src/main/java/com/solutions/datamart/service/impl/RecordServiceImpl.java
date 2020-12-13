@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,7 +38,7 @@ public class RecordServiceImpl implements RecordService {
 		try {
 			for (Media media : mediaList) {
 
-				System.err.println(media);
+				System.err.println(media.getName() + " Crawling started");
 
 				createRecord(media);
 			}
@@ -50,7 +52,7 @@ public class RecordServiceImpl implements RecordService {
 
 		Record record = null;
 		try {
-			URL url = new URL("http://feeds.bbci.co.uk/news/world/rss.xml?edition=uk#");
+			URL url = new URL(media.getUrl());
 			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 			// Reading the feed
 			SyndFeedInput input = new SyndFeedInput();
@@ -65,18 +67,23 @@ public class RecordServiceImpl implements RecordService {
 
 			while (itEntries.hasNext()) {
 				SyndEntry entry = itEntries.next();
-				// if (entry.getPublishedDate() == date) {
-				record = new Record();
-				record.setTitle(entry.getTitle());
-				record.setLink(entry.getLink());
-				record.setDescription(entry.getDescription().toString());
-				record.setCreatedDate(entry.getPublishedDate());
-				record.setUpdatedDate(entry.getUpdatedDate());
 
-				record.setMedia(media);
+				if (DateUtils.isSameDay(entry.getPublishedDate(), date)
+						|| DateUtils.isSameDay(entry.getUpdatedDate(), date)) {
+					if (StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
+							|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")) {
+						record = new Record();
+						record.setTitle(entry.getTitle());
+						record.setLink(entry.getLink());
+						// record.setDescription(entry.getDescription().toString());
+						record.setCreatedDate(entry.getPublishedDate());
+						record.setUpdatedDate(entry.getUpdatedDate());
 
-				records.add(record);
-				// }
+						record.setMedia(media);
+
+						records.add(record);
+					}
+				}
 			}
 
 			recordRepository.saveAll(records);
@@ -85,6 +92,28 @@ public class RecordServiceImpl implements RecordService {
 			e.printStackTrace();
 		}
 
+	}
+
+	@Override
+	public List<Record> getAllNews() {
+		return recordRepository.getAllNews();
+	}
+
+	@Override
+	public List<Record> getAllNewsByDate(Date fromDate, Date toDate) {
+		return recordRepository.getAllNewsByDate(fromDate, toDate);
+	}
+
+	@Override
+	public List<Record> getAllNewsByContentAndDate(String content, Date fromDate, Date toDate) {
+
+		return recordRepository.getAllNewsByContentAndDate(content, fromDate, toDate);
+	}
+
+	@Override
+	public List<Record> getAllNewsByContent(String content) {
+
+		return recordRepository.getAllNewsByContent(content);
 	}
 
 }
