@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import com.solutions.datamart.model.Property;
 import com.solutions.datamart.repository.PropertyRepository;
-import com.solutions.datamart.repository.RecordRepository;
 import com.solutions.datamart.service.RecordService;
 
 @Configuration
