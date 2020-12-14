@@ -33,13 +33,14 @@ public class FacebookServiceImp implements FacebookService {
 			if(facebook == null)
 			   facebook = new FacebookTemplate(fbToken);
 			List<Post> posts = facebook.feedOperations().getPosts().stream()
-					.filter(post -> post.getCreatedTime().after(new DateTime().minusHours(48).toDate()))
+					.filter(post -> post.getCreatedTime().after(new DateTime().minusHours(248).toDate()))
 					.collect(Collectors.toList());
 			List<FaceBookPost> FBPosts = new ArrayList<>();
 			
 			for (Post post : posts) {
 				FaceBookPost FBPost = new FaceBookPost();
 				FBPost.setCreatedDate(post.getCreatedTime());
+				FBPost.setCreatedBy(post.getName());
 				FBPost.setDescription(post.getDescription());
 				FBPost.setFacebookId(post.getId());
 				FBPost.setMessage(post.getMessage());
