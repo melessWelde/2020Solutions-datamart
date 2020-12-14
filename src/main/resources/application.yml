@@ -4,3 +4,14 @@ service:
     url: https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=
     param: retweet_status=false&tweet_mode=extended
     home_url: https://twitter.com/
+    fixedRate: 1800000
+    initialDelay: 1000
+  facebook:
+    fixedRate: 1800000
+    initialDelay: 1000
+  news:
+    fixedRate: 21600000
+    initialDelay: 900000
+  cache:
+    fixedRate: 86400000
+    initialDelay: 0
