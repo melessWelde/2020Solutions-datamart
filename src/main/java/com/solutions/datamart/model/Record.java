@@ -31,7 +31,7 @@ public class Record extends AuditUserDate implements Serializable {
 	private String title;
 	@Column
 	private String link;
-	@Column
+	@Column(length = 5000)
 	private String description;
 	@Column
 	private String content;
