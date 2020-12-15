@@ -1,11 +1,11 @@
 package com.solutions.datamart.service;
 
-import java.util.List;
-
 import com.solutions.datamart.model.Media;
+
+import java.util.List;
 
 public interface MediaService {
 
-	public List<Media> getAllMedias();
+    List<Media> getAllMedias();
 
 }

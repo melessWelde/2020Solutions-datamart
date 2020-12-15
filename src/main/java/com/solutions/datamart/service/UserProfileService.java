@@ -1,22 +1,21 @@
 package com.solutions.datamart.service;
 
-import java.util.List;
-
+import com.solutions.datamart.entity.TwitterUser;
 import org.springframework.social.twitter.api.TwitterProfile;
 
-import com.solutions.datamart.entity.TwitterUser;
+import java.util.List;
 
 public interface UserProfileService {
 
-	public TwitterProfile saveUserInfo(String screenName);
+    TwitterProfile saveUserInfo(String screenName);
 
-	public List<String> getAllScreenNames();
-	
-	public List<TwitterUser> saveUserProfile(String screenName);
-	
-	public List<TwitterUser> getAllTwitterUsers();
-	
-	public List<TwitterUser> deleteTwitterUser(long id);
-	
-	
+    List<String> getAllScreenNames();
+
+    List<TwitterUser> saveUserProfile(String screenName);
+
+    List<TwitterUser> getAllTwitterUsers();
+
+    List<TwitterUser> deleteTwitterUser(long id);
+
+
 }

@@ -1,17 +1,17 @@
 package com.solutions.datamart.service;
 
-import java.util.List;
-
 import com.solutions.datamart.entity.HashTag;
+
+import java.util.List;
 
 public interface HashTagService {
 
-	public void saveHashTag(String tagName);
-	
-	public List<String> getHashTags();
-	
-	public List<HashTag> getAllHashTags();
-	
-	public void deleteHashTag(int id);
-	
+    void saveHashTag(String tagName);
+
+    List<String> getHashTags();
+
+    List<HashTag> getAllHashTags();
+
+    void deleteHashTag(int id);
+
 }
