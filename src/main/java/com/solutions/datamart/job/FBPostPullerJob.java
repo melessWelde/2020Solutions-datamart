@@ -13,8 +13,8 @@ public class FBPostPullerJob {
 
 	@Autowired
 	private FacebookService facebookService;
-	
-	@Scheduled(fixedRate = 60 * 1000, initialDelay = 1000)
+
+	@Scheduled(fixedDelayString = "${fbpost.fixedDelay}", initialDelay = 10000)
 	public void saveFBPost() {
 		facebookService.createPosts();
 	}
