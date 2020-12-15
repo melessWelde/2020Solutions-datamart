@@ -76,7 +76,7 @@ public class TweetController {
 
 
 		} catch (Exception e) {
-			log.error(EXCEPTION_MESSAGE, "fetching data from database ","getAllTweetEntities", e.getMessage(), e.getCause());
+			log.error(EXCEPTION_MESSAGE, "fetching twitter data from database ","getAllTweetEntities", e.getMessage(), e.getCause());
 		}
 		return null;
 	}

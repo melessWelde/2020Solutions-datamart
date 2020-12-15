@@ -25,10 +25,10 @@ public class TwitterPullerJob {
 	@Autowired
 	private PropertyRepository propertyRepository;
 	
-	@Scheduled(fixedDelayString = "${news.fixedDelay}", initialDelay = 10000)
+	@Scheduled(fixedDelayString = "${twitter.fixedDelay}", initialDelay = 10000)
 	public void saveTweets() {
 
-		if (propertyRepository.findByPropertyName("NEWS_JOB").isPresent()) {
+		if (propertyRepository.findByPropertyName("TWEETS_JOB").isPresent()) {
 			Optional<Property> property = propertyRepository.findByPropertyName("TWEETS_JOB");
 
 			if (property.get().getPropertyValue().equals("ON")) {
