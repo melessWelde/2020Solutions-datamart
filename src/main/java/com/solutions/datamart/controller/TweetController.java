@@ -55,6 +55,7 @@ public class TweetController {
 
 	@GetMapping("/searchtweets")
 	public List<TweetEntity> getAllTweetEntities(@RequestParam("username") String username, @RequestParam("tagtext") String tagtext, @RequestParam("fromdate") String fromdate, @RequestParam("todate") String todate) {
+		
 		try {
 			if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
 				return tweetService.getAllTweetsByNameHashAndDate(username, tagtext, convertToDate(fromdate), convertToDate(todate));

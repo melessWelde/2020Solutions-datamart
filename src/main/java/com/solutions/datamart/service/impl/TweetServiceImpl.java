@@ -156,7 +156,6 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public List<TweetEntity> getAllTweetsByDate(Date fromDate, Date toDate) {
-        // TODO Auto-generated method stub
-        return null;
+    	 return tweetRepository.getAllTweetsByDate(fromDate, toDate);
     }
 }
