@@ -79,4 +79,29 @@ public class FacebookServiceImp implements FacebookService {
 		return fbPostRepository.getAllFaceBookPostByPostContent(content);
 	}
 
+	@Override
+	public List<FaceBookPost> getAllLatestFBPost() {
+		List<FaceBookPost> posts =fbPostRepository.getAllLatestFBPosts();
+		return posts;
+	}
+	
+	@Override
+	public List<FaceBookPost> searchPostsByKey(String SearchKey) {
+		List<FaceBookPost> posts =fbPostRepository.getFBPostsBySearchKey("%"+SearchKey+"%");
+		return posts;
+	}
+	
+	@Override
+	public List<FaceBookPost> searchPostsByKeyAndDate(String SearchKey,Date DateFrom,Date DateTo) {
+		List<FaceBookPost> posts =fbPostRepository.getFBPostsByKeyAndDate("%"+SearchKey+"%",DateFrom,DateTo);
+		return posts;
+	}
+	
+	@Override
+	public List<FaceBookPost> searchPostsBydDate(Date DateFrom,Date DateTo) {
+		List<FaceBookPost> posts =fbPostRepository.getFBPostsByDate(DateFrom,DateTo);
+		return posts;
+	}
+	
+	
 }

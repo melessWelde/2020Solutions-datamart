@@ -18,5 +18,11 @@ public interface FacebookService {
     List<FaceBookPost> getAllFaceBookPostByDate(Date fromDate, Date toDate);
 
     List<FaceBookPost> getAllFaceBookPostByContentAndDate(String content, Date fromDate, Date toDate);
+    
+   // public void getPosts();
+	public List<FaceBookPost> getAllLatestFBPost();
+	public List<FaceBookPost> searchPostsByKey(String SearchKey);
+	public List<FaceBookPost> searchPostsByKeyAndDate(String SearchKey,Date DateFrom,Date DateTo);
+	public List<FaceBookPost> searchPostsBydDate(Date DateFrom,Date DateTo);
 
 }
