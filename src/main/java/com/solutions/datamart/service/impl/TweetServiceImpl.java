@@ -68,7 +68,7 @@ public class TweetServiceImpl implements TweetService {
 
         }
     }
-
+   
     private HttpEntity<String> getHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.add(AUTH, properties.getHeader());
@@ -78,7 +78,7 @@ public class TweetServiceImpl implements TweetService {
     private boolean isHashTag(TweetEntity tweetEntity) {
         return hashTexts.stream().anyMatch(s -> tweetEntity.getTweetText().contains(s));
     }
-
+    
     private List<TweetEntity> getListOfTweet(String json) {
         List<TweetEntity> tweets = new ArrayList<>();
         try {
@@ -94,7 +94,7 @@ public class TweetServiceImpl implements TweetService {
 
     }
 
-    private TweetEntity buildTweetObject(TweetModel tweetM) {
+    public TweetEntity buildTweetObject(TweetModel tweetM) {
         return TweetEntity.builder()
                 .createdDt(tweetM.getCreatedAt())
                 .favouriteCount(tweetM.getFavoriteCount())

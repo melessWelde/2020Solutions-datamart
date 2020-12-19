@@ -13,4 +13,5 @@ public class TwitterProperties {
     private String param;
     private String home_url;
     private String header;
+    private String paramInitial;
 }

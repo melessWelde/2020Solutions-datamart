@@ -28,4 +28,6 @@ public class TwitterUser implements Serializable{
 	private String userUrl;
 	
 	private String imageUrl;
+	
+	private String historyFlag;
 }

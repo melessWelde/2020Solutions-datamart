@@ -1,9 +1,9 @@
 package com.solutions.datamart.service;
 
-import com.solutions.datamart.entity.TweetEntity;
-
 import java.util.Date;
 import java.util.List;
+
+import com.solutions.datamart.entity.TweetEntity;
 
 public interface TweetService {
     void createTweetsRecord();
@@ -23,4 +23,5 @@ public interface TweetService {
     List<TweetEntity> getAllTweetsByHashTagAndDate(String hashText, Date from, Date to);
 
     List<TweetEntity> getAllTweetsByDate(Date fromDate, Date toDate);
+
 }

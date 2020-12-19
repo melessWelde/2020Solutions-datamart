@@ -1,6 +1,5 @@
 package com.solutions.datamart.job;
 
-import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +20,11 @@ public class TwitterPullerJob {
 
 	@Autowired
 	private TweetService tweetService;
-	
+
 	@Autowired
 	private PropertyRepository propertyRepository;
-	
-	@Scheduled(fixedDelayString = "${twitter.fixedDelay}", initialDelay = 10000)
+
+	@Scheduled(fixedDelayString = "${service.twitter.fixedDelay}", initialDelay = 7 * 60 * 1000)
 	public void saveTweets() {
 
 		if (propertyRepository.findByPropertyName("TWEETS_JOB").isPresent()) {
@@ -33,9 +32,9 @@ public class TwitterPullerJob {
 
 			if (property.get().getPropertyValue().equals("ON")) {
 
-				//log.info("News batch has been started at: {}", new Date());
+				// log.info("News batch has been started at: {}", new Date());
 				tweetService.createTweetsRecord();
-				//log.info("News batch has been completed at: {}", new Date());
+				// log.info("News batch has been completed at: {}", new Date());
 
 			} else {
 				log.info("Batch has been disabled in the property table for the TWEETS_JOB as OFF ");
