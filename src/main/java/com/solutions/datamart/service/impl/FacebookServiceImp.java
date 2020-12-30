@@ -26,26 +26,38 @@ public class FacebookServiceImp implements FacebookService {
 	private String fbToken;
 	
 	Facebook facebook;
+	
+	private boolean initialPull = false;
 
 	@Override
 	public void createPosts() {
 		try {
 			if(facebook == null)
 			   facebook = new FacebookTemplate(fbToken);
-			List<Post> posts = facebook.feedOperations().getPosts().stream()
-					.filter(post -> post.getCreatedTime().after(new DateTime().minusHours(248).toDate()))
+			List<Post> posts; 
+			if(initialPull) {
+				posts = facebook.feedOperations().getPosts().stream()
+					.filter(post -> post.getCreatedTime().after(new DateTime().minusHours(2).toDate()))
 					.collect(Collectors.toList());
+			}else {
+				posts = facebook.feedOperations().getPosts();
+				initialPull = false;
+			}
+			
 			List<FaceBookPost> FBPosts = new ArrayList<>();
 			
 			for (Post post : posts) {
+				String description = null != post.getDescription()? "Shared without description. Please open the link" : post.getDescription();
+				String message =  null != post.getMessage()? "Shared without Message. Please open the link" : post.getMessage();		
+				String link = null != post.getLink()? post.getActions().get(2).getLink() :  post.getLink();				
 				FaceBookPost FBPost = new FaceBookPost();
 				FBPost.setCreatedDate(post.getCreatedTime());
 				FBPost.setCreatedBy(post.getName());
-				FBPost.setDescription(post.getDescription());
+				FBPost.setDescription(description);
 				FBPost.setFacebookId(post.getId());
-				FBPost.setMessage(post.getMessage());
+				FBPost.setMessage(message);
 				FBPost.setSource(post.getSource());
-				FBPost.setLink(post.getLink());
+				FBPost.setLink(link);
 				FBPost.setStory(post.getStory());
 				FBPosts.add(FBPost);
 
