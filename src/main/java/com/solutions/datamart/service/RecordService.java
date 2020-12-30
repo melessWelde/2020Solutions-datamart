@@ -8,7 +8,9 @@ import com.solutions.datamart.model.Record;
 
 public interface RecordService {
 
-	public void createRecord(Media media);
+	public void createDailyRecords(Media media);
+	
+	public void createAllRecords(Media media);
 
 	public void getAllMedias();
 
