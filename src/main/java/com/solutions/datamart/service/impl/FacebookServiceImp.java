@@ -41,15 +41,15 @@ public class FacebookServiceImp implements FacebookService {
 					.collect(Collectors.toList());
 			}else {
 				posts = facebook.feedOperations().getPosts();
-				initialPull = false;
+				initialPull = true;
 			}
 			
 			List<FaceBookPost> FBPosts = new ArrayList<>();
 			
 			for (Post post : posts) {
-				String description = null != post.getDescription()? "Shared without description. Please open the link" : post.getDescription();
-				String message =  null != post.getMessage()? "Shared without Message. Please open the link" : post.getMessage();		
-				String link = null != post.getLink()? post.getActions().get(2).getLink() :  post.getLink();				
+				String description = null == post.getDescription()? "Shared without description. Please open the link" : post.getDescription();
+				String message =  null == post.getMessage()? "Shared without Message. Please open the link" : post.getMessage();		
+				String link = null == post.getLink()? post.getActions().get(2).getLink() :  post.getLink();				
 				FaceBookPost FBPost = new FaceBookPost();
 				FBPost.setCreatedDate(post.getCreatedTime());
 				FBPost.setCreatedBy(post.getName());
