@@ -17,9 +17,10 @@ public class CacheController {
     @Autowired
     CacheUtil cacheUtil;
 
-    @GetMapping("/cachedate")
+    @GetMapping("/cachedata")
     public String cacheDate() {
         try {
+            cacheUtil.clearCache();
             cacheUtil.fetchHashTag();
             cacheUtil.fetchUserProfile();
             return SUCCESS_CACHE_MSG;

@@ -3,6 +3,7 @@ package com.solutions.datamart.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.solutions.datamart.dto.HashTagRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,10 @@ public class HashTagServiceImpl implements HashTagService{
 		hashTagRepository.save(hashTag);
 	}
 
+	@Override
+	public void saveHashTags(HashTagRequest tagName) {
+		tagName.getHashText().forEach(this::saveHashTag);
+	}
 	@Override
 	public List<String> getHashTags() {
 		List<String> hashTexts = new ArrayList<String>();

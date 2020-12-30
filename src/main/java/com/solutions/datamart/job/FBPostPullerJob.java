@@ -1,5 +1,6 @@
 package com.solutions.datamart.job;
 
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +25,19 @@ public class FBPostPullerJob {
 	@Autowired
 	private PropertyRepository propertyRepository;
 
-	@Scheduled(fixedDelayString = "${service.facebook.fixedDelay}", initialDelay = 17 * 60 * 1000)
+	@Scheduled(fixedDelayString = "${service.facebook.fixedDelay}", initialDelay = 0)
 	public void saveFBPost() {
 		
 		if (propertyRepository.findByPropertyName("FACEBOOK_JOB").isPresent()) {
 			Optional<Property> property = propertyRepository.findByPropertyName("FACEBOOK_JOB");
 
 			if (property.get().getPropertyValue().equals("ON")) {
+				log.info("FaceBook batch has been started at: {}", new Date());
+
 				facebookService.createPosts();
+
+				log.info("FaceBook batch has been end at: {}", new Date());
+
 			}else {
 				log.info("Batch has been disabled in the property table for the FACEBOOK_JOB as OFF ");
 			}

@@ -34,11 +34,10 @@ public class FacebookServiceImp implements FacebookService {
 		try {
 			if(facebook == null)
 			   facebook = new FacebookTemplate(fbToken);
-			List<Post> posts; 
+			List<Post> posts;
 			if(initialPull) {
 				posts = facebook.feedOperations().getPosts().stream()
-					.filter(post -> post.getCreatedTime().after(new DateTime().minusHours(2).toDate()))
-					.collect(Collectors.toList());
+					.filter(post -> post.getCreatedTime().after(new DateTime().minusHours(2).toDate())).collect(Collectors.toList());
 			}else {
 				posts = facebook.feedOperations().getPosts();
 				initialPull = true;

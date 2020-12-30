@@ -15,7 +15,7 @@ public class CacheJob {
     @Autowired
     private CacheUtil cacheUtil;
 
-    @Scheduled(fixedDelayString = "${service.cache.fixedDelay}", initialDelay = 5 * 60 * 1000)
+    @Scheduled(fixedDelayString = "${service.cache.fixedDelay}", initialDelay = 0)
     public void refreshCache() {
         int clearSize = cacheUtil.clearCache();
         log.info("Cache size after clear is {} ", clearSize);
