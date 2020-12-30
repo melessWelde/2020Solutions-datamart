@@ -11,7 +11,7 @@ service:
     fixedDelay: 7200000
     initialDelay: 100000
   news:
-    fixedDelay: 43200000
+    fixedDelay: 60000
     initialDelay: 900000
   cache:
     fixedDelay: 1620000

@@ -4,8 +4,11 @@ import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import com.solutions.datamart.job.NewsPullerJob;
 import com.solutions.datamart.model.Media;
+import com.solutions.datamart.model.Property;
 import com.solutions.datamart.model.Record;
+import com.solutions.datamart.repository.PropertyRepository;
 import com.solutions.datamart.repository.RecordRepository;
 import com.solutions.datamart.service.MediaService;
 import com.solutions.datamart.service.RecordService;
@@ -21,98 +24,172 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Service("recordService")
 @Transactional
 public class RecordServiceImpl implements RecordService {
-    @Autowired
-    private RecordRepository recordRepository;
+	private static final Logger logger = LogManager.getLogger(RecordServiceImpl.class);
 
-    @Autowired
-    private MediaService mediaService;
+	@Autowired
+	private RecordRepository recordRepository;
 
-    public void getAllMedias() {
-        List<Media> mediaList = mediaService.getAllMedias();
+	@Autowired
+	private MediaService mediaService;
 
-        try {
-            for (Media media : mediaList) {
+	@Autowired
+	private PropertyRepository propertyRepository;
 
-                System.err.println(media.getName() + " Crawling started");
+	public void getAllMedias() {
+		List<Media> mediaList = mediaService.getAllMedias();
+		Optional<Property> property = propertyRepository.findByPropertyName("NEWS_GET_ALL");
 
-                createRecord(media);
-            }
+		try {
+			if (null != property && property.get().getPropertyValue().equals("ON")) {
+				for (Media media : mediaList) {
+					logger.info(media.getName() + " all news crawling started");
 
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-    }
+					createAllRecords(media);
 
-    public void createRecord(Media media) {
+					logger.info(media.getName() + " all news crawling ended");
+				}
+			} else {
+				for (Media media : mediaList) {
+					logger.info(media.getName() + " daily news crawling started");
 
-        Record record = null;
-        try {
-            URL url = new URL(media.getUrl());
-            HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-            // Reading the feed
-            SyndFeedInput input = new SyndFeedInput();
-            SyndFeed feed = input.build(new XmlReader(httpcon));
+					createDailyRecords(media);
 
-            List<SyndEntry> entries = feed.getEntries();
-            Iterator<SyndEntry> itEntries = entries.iterator();
+					logger.info(media.getName() + " daily news crawling ended");
+				}
+			}
 
-            List<Record> records = new ArrayList<>();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+	}
 
-            Date date = new Date();
+	public void createAllRecords(Media media) {
 
-            while (itEntries.hasNext()) {
-                SyndEntry entry = itEntries.next();
+		Record record = null;
+		try {
+			URL url = new URL(media.getUrl());
+			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+			// Reading the feed
+			SyndFeedInput input = new SyndFeedInput();
+			SyndFeed feed = input.build(new XmlReader(httpcon));
 
-                if (DateUtils.isSameDay(entry.getPublishedDate(), date)
-                        || DateUtils.isSameDay(entry.getUpdatedDate(), date)) {
-                    if (StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
-                            || StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")) {
-                        record = new Record();
-                        record.setTitle(entry.getTitle());
-                        record.setLink(entry.getLink());
-                        record.setDescription(entry.getDescription().toString());
-                        record.setCreatedDate(entry.getPublishedDate());
-                        record.setUpdatedDate(entry.getUpdatedDate());
+			List<SyndEntry> entries = feed.getEntries();
+			Iterator<SyndEntry> itEntries = entries.iterator();
 
-                        record.setMedia(media);
+			List<Record> records = new ArrayList<>();
 
-                        records.add(record);
-                    }
-                }
-            }
+			Date date = new Date();
 
-            recordRepository.saveAll(records);
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+			while (itEntries.hasNext()) {
+				SyndEntry entry = itEntries.next();
 
-    }
+				if (StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
+						|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")) {
+					record = new Record();
+					record.setTitle(entry.getTitle());
+					record.setLink(entry.getLink());
+					record.setDescription(entry.getDescription().toString());
+					if (null != entry.getPublishedDate()) {
+						record.setCreatedDate(entry.getPublishedDate());
+					}
 
-    @Override
-    public List<Record> getAllNews() {
-        return recordRepository.getAllNews();
-    }
+					if (null != entry.getUpdatedDate()) {
+						record.setUpdatedDate(entry.getUpdatedDate());
+					}
 
-    @Override
-    public List<Record> getAllNewsByDate(Date fromDate, Date toDate) {
-        return recordRepository.getAllNewsByDate(fromDate, toDate);
-    }
+					record.setMedia(media);
 
-    @Override
-    public List<Record> getAllNewsByContentAndDate(String content, Date fromDate, Date toDate) {
+					records.add(record);
+				}
+			}
 
-        return recordRepository.getAllNewsByContentAndDate(content, fromDate, toDate);
-    }
+			recordRepository.saveAll(records);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    @Override
-    public List<Record> getAllNewsByContent(String content) {
+	}
 
-        return recordRepository.getAllNewsByContent(content);
-    }
+	public void createDailyRecords(Media media) {
+
+		Record record = null;
+		try {
+			URL url = new URL(media.getUrl());
+			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+			// Reading the feed
+			SyndFeedInput input = new SyndFeedInput();
+			SyndFeed feed = input.build(new XmlReader(httpcon));
+
+			List<SyndEntry> entries = feed.getEntries();
+			Iterator<SyndEntry> itEntries = entries.iterator();
+
+			List<Record> records = new ArrayList<>();
+
+			Date date = new Date();
+
+			while (itEntries.hasNext()) {
+				SyndEntry entry = itEntries.next();
+
+				if ((null != entry.getPublishedDate() && DateUtils.isSameDay(entry.getPublishedDate(), date))
+						|| (null != entry.getUpdatedDate() && DateUtils.isSameDay(entry.getUpdatedDate(), date))) {
+					if (StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
+							|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")) {
+						record = new Record();
+						record.setTitle(entry.getTitle());
+						record.setLink(entry.getLink());
+						record.setDescription(entry.getDescription().toString());
+						if (null != entry.getPublishedDate()) {
+							record.setCreatedDate(entry.getPublishedDate());
+						}
+
+						if (null != entry.getUpdatedDate()) {
+							record.setUpdatedDate(entry.getUpdatedDate());
+						}
+
+						record.setMedia(media);
+
+						records.add(record);
+					}
+				}
+			}
+
+			recordRepository.saveAll(records);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public List<Record> getAllNews() {
+		return recordRepository.getAllNews();
+	}
+
+	@Override
+	public List<Record> getAllNewsByDate(Date fromDate, Date toDate) {
+		return recordRepository.getAllNewsByDate(fromDate, toDate);
+	}
+
+	@Override
+	public List<Record> getAllNewsByContentAndDate(String content, Date fromDate, Date toDate) {
+
+		return recordRepository.getAllNewsByContentAndDate(content, fromDate, toDate);
+	}
+
+	@Override
+	public List<Record> getAllNewsByContent(String content) {
+
+		return recordRepository.getAllNewsByContent(content);
+	}
 
 }
