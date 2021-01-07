@@ -2,6 +2,7 @@ package com.solutions.datamart.service.impl;
 
 import com.rometools.rome.feed.synd.SyndEntry;
 import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 import com.solutions.datamart.job.NewsPullerJob;
@@ -18,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -73,41 +76,21 @@ public class RecordServiceImpl implements RecordService {
 
 	public void createAllRecords(Media media) {
 
-		Record record = null;
 		try {
-			URL url = new URL(media.getUrl());
-			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-			// Reading the feed
-			SyndFeedInput input = new SyndFeedInput();
-			SyndFeed feed = input.build(new XmlReader(httpcon));
-
-			List<SyndEntry> entries = feed.getEntries();
-			Iterator<SyndEntry> itEntries = entries.iterator();
+			Iterator<SyndEntry> itEntries = extractNewsFromRssFeed(media);
 
 			List<Record> records = new ArrayList<>();
 
-			Date date = new Date();
+			List<String> linksFromDB = recordRepository.getNewsLinkforMedia(media.getId());
 
 			while (itEntries.hasNext()) {
 				SyndEntry entry = itEntries.next();
 
 				if (StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
 						|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")) {
-					record = new Record();
-					record.setTitle(entry.getTitle());
-					record.setLink(entry.getLink());
-					record.setDescription(entry.getDescription().toString());
-					if (null != entry.getPublishedDate()) {
-						record.setCreatedDate(entry.getPublishedDate());
+					if (!linksFromDB.contains(entry.getLink())) {
+						recordsObjectforDB(media, records, entry);
 					}
-
-					if (null != entry.getUpdatedDate()) {
-						record.setUpdatedDate(entry.getUpdatedDate());
-					}
-
-					record.setMedia(media);
-
-					records.add(record);
 				}
 			}
 
@@ -119,20 +102,45 @@ public class RecordServiceImpl implements RecordService {
 
 	}
 
+	private Iterator<SyndEntry> extractNewsFromRssFeed(Media media)
+			throws MalformedURLException, IOException, FeedException {
+		URL url = new URL(media.getUrl());
+		HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
+		// Reading the feed
+		SyndFeedInput input = new SyndFeedInput();
+		SyndFeed feed = input.build(new XmlReader(httpcon));
+
+		List<SyndEntry> entries = feed.getEntries();
+
+		return entries.iterator();
+	}
+
+	private void recordsObjectforDB(Media media, List<Record> records, SyndEntry entry) {
+		Record record = new Record();
+		record.setTitle(entry.getTitle());
+		record.setLink(entry.getLink());
+		record.setDescription(entry.getDescription().toString());
+		if (null != entry.getPublishedDate()) {
+			record.setCreatedDate(entry.getPublishedDate());
+		}
+
+		if (null != entry.getUpdatedDate()) {
+			record.setUpdatedDate(entry.getUpdatedDate());
+		}
+
+		record.setMedia(media);
+
+		records.add(record);
+	}
+
 	public void createDailyRecords(Media media) {
 
-		Record record = null;
 		try {
-			URL url = new URL(media.getUrl());
-			HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
-			// Reading the feed
-			SyndFeedInput input = new SyndFeedInput();
-			SyndFeed feed = input.build(new XmlReader(httpcon));
-
-			List<SyndEntry> entries = feed.getEntries();
-			Iterator<SyndEntry> itEntries = entries.iterator();
+			Iterator<SyndEntry> itEntries = extractNewsFromRssFeed(media);
 
 			List<Record> records = new ArrayList<>();
+
+			List<String> linksFromDB = recordRepository.getNewsLinkforMedia(media.getId());
 
 			Date date = new Date();
 
@@ -143,21 +151,9 @@ public class RecordServiceImpl implements RecordService {
 						|| (null != entry.getUpdatedDate() && DateUtils.isSameDay(entry.getUpdatedDate(), date))) {
 					if (StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
 							|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")) {
-						record = new Record();
-						record.setTitle(entry.getTitle());
-						record.setLink(entry.getLink());
-						record.setDescription(entry.getDescription().toString());
-						if (null != entry.getPublishedDate()) {
-							record.setCreatedDate(entry.getPublishedDate());
+						if (!linksFromDB.contains(entry.getLink())) {
+							recordsObjectforDB(media, records, entry);
 						}
-
-						if (null != entry.getUpdatedDate()) {
-							record.setUpdatedDate(entry.getUpdatedDate());
-						}
-
-						record.setMedia(media);
-
-						records.add(record);
 					}
 				}
 			}

@@ -26,4 +26,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 	public List<Record> getAllNewsByContentAndDate(@Param("content") String content, @Param("fromDate") Date fromDate,
 			@Param("toDate") Date toDate);
 
+	@Query(value = "select link FROM record WHERE media_id = :mediaId", nativeQuery = true)
+	public List<String> getNewsLinkforMedia(@Param("mediaId") long mediaId);
+
 }

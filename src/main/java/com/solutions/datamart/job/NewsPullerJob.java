@@ -25,7 +25,8 @@ public class NewsPullerJob {
 	@Autowired
 	private PropertyRepository propertyRepository;
 
-	@Scheduled(fixedDelayString = "${service.news.fixedDelay}", initialDelay = 60000)
+	//@Scheduled(cron = "${service.news.cron}")
+	@Scheduled(fixedDelayString = "${service.news.fixedDelay}", initialDelay = 1000)
 	public void saveNews() {
 
 		if (propertyRepository.findByPropertyName("NEWS_JOB").isPresent()) {
