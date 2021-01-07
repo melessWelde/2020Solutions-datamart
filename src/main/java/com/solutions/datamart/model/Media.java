@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -36,6 +38,7 @@ public class Media extends AuditUserDate implements Serializable {
 	@Column
 	private String country;
 
+	@JsonManagedReference
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "media", cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REMOVE })
 	private Set<Record> record = new HashSet<>();

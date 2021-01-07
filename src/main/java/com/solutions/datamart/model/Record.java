@@ -15,6 +15,8 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -36,6 +38,7 @@ public class Record extends AuditUserDate implements Serializable {
 	@Column
 	private String content;
 
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
 	@JoinColumn(name = "mediaId", nullable = true)
 	private Media media;
