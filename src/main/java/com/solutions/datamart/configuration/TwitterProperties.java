@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("service.twitter")
 public class TwitterProperties {
 
-    private String url;
-    private String param;
-    private String home_url;
-    private String header;
-    private String paramInitial;
+	private String url;
+	private String param;
+	private String home_url;
+	private String header;
+	private String paramInitial;
 }

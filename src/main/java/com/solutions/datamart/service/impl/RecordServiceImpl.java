@@ -1,24 +1,5 @@
 package com.solutions.datamart.service.impl;
 
-import com.rometools.rome.feed.synd.SyndEntry;
-import com.rometools.rome.feed.synd.SyndFeed;
-import com.rometools.rome.io.FeedException;
-import com.rometools.rome.io.SyndFeedInput;
-import com.rometools.rome.io.XmlReader;
-import com.solutions.datamart.job.NewsPullerJob;
-import com.solutions.datamart.model.Media;
-import com.solutions.datamart.model.Property;
-import com.solutions.datamart.model.Record;
-import com.solutions.datamart.repository.PropertyRepository;
-import com.solutions.datamart.repository.RecordRepository;
-import com.solutions.datamart.service.MediaService;
-import com.solutions.datamart.service.RecordService;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -29,8 +10,26 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.rometools.rome.feed.synd.SyndEntry;
+import com.rometools.rome.feed.synd.SyndFeed;
+import com.rometools.rome.io.FeedException;
+import com.rometools.rome.io.SyndFeedInput;
+import com.rometools.rome.io.XmlReader;
+import com.solutions.datamart.model.Media;
+import com.solutions.datamart.model.Property;
+import com.solutions.datamart.model.Record;
+import com.solutions.datamart.repository.PropertyRepository;
+import com.solutions.datamart.repository.RecordRepository;
+import com.solutions.datamart.service.MediaService;
+import com.solutions.datamart.service.RecordService;
 
 @Service("recordService")
 @Transactional
