@@ -19,7 +19,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true, exclude = "users")
 @Entity
 @Table(name = "role")
 @EntityListeners(AuditingEntityListener.class)
