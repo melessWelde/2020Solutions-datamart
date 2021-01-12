@@ -9,7 +9,7 @@ public class MainController {
 
 	@GetMapping("/")
 	public String root() {
-		return "index";
+		return "TweetSearch";
 	}
 
 	@GetMapping("/login")

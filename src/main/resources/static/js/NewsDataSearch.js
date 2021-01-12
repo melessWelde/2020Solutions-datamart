@@ -32,7 +32,7 @@ $("#btnSearch").click(function(){
   searchNews();
 });
 
-searchNews();
+loadLatestNews();
 });
 
 
@@ -41,7 +41,7 @@ function loadLatestNews(){
 console.log('loadLatestPostNews');
 
 $.ajax({
-  url: "/allLatestPosts",
+  url: "/datamart/news",
   type: 'GET',
   success: function(data) {
     var dataSet = {
@@ -49,23 +49,24 @@ $.ajax({
     };
 	  console.log(dataSet);
 	
-	$('#tblFBPosts').DataTable( {
+	$('#tblNews').DataTable( {
     "destroy": true,
 		data: data,
 		searching: false,
-         "columns": [
+          "columns": [
                     { "data": "createdDate","width": "10%" },
-					{ "data": "description" },
-					{ "data": "message" },
-					{ 
-						"data": "link",
-						 "render": function(data, type, row, meta){
-						if(type === 'display'){
-							data = '<a href="' + data + '" target="_blank" >' + 'Open' + '</a>';
-						}
+                    { "data": "title" },
+					          { "data": "description" },
+                    { "data": "content" },
+                    { 
+                      "data": "link",
+                      "render": function(data, type, row, meta){
+                      if(type === 'display'){
+                        data = '<a href="' + data + '" target="_blank" >' + 'Open' + '</a>';
+                      }
 
-            return data;
-         } 
+                      return data;
+                  } 
 				
 				
 					

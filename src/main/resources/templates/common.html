@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Tigray Information Archival</title>
+</head>
+<body>
+	<div th:fragment="header">
+		<nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+			<a class="navbar-brand" href="#">DATA WAREHOUSE</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarCollapse" aria-controls="navbarCollapse"
+				aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><a class="nav-link"
+						th:href="@{NewsDataSearch}">News feed <span class="sr-only">(current)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{FBPostSearch}">FB Search </a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/}"
+						tabindex="-1" aria-disabled="true">Twitter</a></li>
+				</ul>
+				<br> <br>
+
+				<ul class="nav navbar-nav">
+					<li sec:authorize="isAuthenticated()"><a
+						th:href="@{/registration}">User Registration</a></li>
+				</ul>
+
+				<ul class="nav navbar-nav">
+					<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+				</ul>
+
+			</div>
+
+		</nav>
+	</div>
+</body>
+</html>
