@@ -26,12 +26,11 @@
 				<br> <br>
 
 				<ul class="nav navbar-nav">
-					<li sec:authorize="isAuthenticated()"><a
-						th:href="@{/registration}">User Registration</a></li>
+					<li sec:authorize="isAuthenticated()"><a  class="nav-link" th:href="@{/registration}">User Registration</a></li>
 				</ul>
 
 				<ul class="nav navbar-nav">
-					<li sec:authorize="isAuthenticated()"><a th:href="@{/logout}">Logout</a></li>
+					<li sec:authorize="isAuthenticated()"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
 				</ul>
 
 			</div>

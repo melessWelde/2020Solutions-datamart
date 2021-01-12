@@ -1,6 +1,10 @@
 
 $(document).ready(function(){
 
+$('.datepicker').datepicker({
+    clearBtn: true
+});
+
   $( "#txtTo" ).prop( "disabled", true );
   $("#txtFrom").change(function(){
       $( "#txtTo" ).prop( "disabled", false );
@@ -92,7 +96,7 @@ $.ajax({
       if (day.length < 2)
         day = '0' + day;
 
-      return [day, month, year].join('-');
+      return [month,day, year].join('/');
     }  
   }
   ]
@@ -169,7 +173,7 @@ $.ajax({
       if (day.length < 2)
         day = '0' + day;
 
-      return [day, month, year].join('-');
+      return [month,day, year].join('/');
     }  
   }
   ]

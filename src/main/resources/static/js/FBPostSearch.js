@@ -86,8 +86,7 @@ $.ajax({
         month = '0' + month;
       if (day.length < 2)
         day = '0' + day;
-
-      return [day, month, year].join('-');
+return [month,day, year].join('/');
     }  
   }
   ]
@@ -161,8 +160,7 @@ $.ajax({
         month = '0' + month;
       if (day.length < 2)
         day = '0' + day;
-
-      return [day, month, year].join('-');
+return [month,day, year].join('/');
     }  
   }
   ]

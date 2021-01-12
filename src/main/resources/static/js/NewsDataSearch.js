@@ -57,7 +57,6 @@ $.ajax({
                     { "data": "createdDate","width": "10%" },
                     { "data": "title" },
 					          { "data": "description" },
-                    { "data": "content" },
                     { 
                       "data": "link",
                       "render": function(data, type, row, meta){
@@ -88,7 +87,7 @@ $.ajax({
       if (day.length < 2)
         day = '0' + day;
 
-      return [day, month, year].join('-');
+      return [month,day, year].join('/');
     }  
   }
   ]
@@ -163,7 +162,7 @@ $.ajax({
       if (day.length < 2)
         day = '0' + day;
 
-      return [day, month, year].join('-');
+      return [month,day, year].join('/');
     }  
   }
   ]
