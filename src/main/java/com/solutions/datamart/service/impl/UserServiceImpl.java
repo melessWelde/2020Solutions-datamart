@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +23,7 @@ import com.solutions.datamart.repository.UserRepository;
 import com.solutions.datamart.service.UserService;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
 	@Autowired
@@ -44,7 +47,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(registration.getPassword()));
 		user.setActive(true);
 
-		Role userRole = roleRepository.findByName("ADMIN");
+		Role userRole = roleRepository.findByName(registration.getRole());
 		user.setRoles(new HashSet<>(Arrays.asList(userRole)));
 
 		return userRepository.save(user);

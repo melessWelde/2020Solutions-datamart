@@ -31,6 +31,8 @@ public class UserRegistrationDto {
 	@NotEmpty
 	private String confirmEmail;
 
+	private String role;
+
 	@AssertTrue
 	private Boolean terms;
 
@@ -89,4 +91,13 @@ public class UserRegistrationDto {
 	public void setTerms(Boolean terms) {
 		this.terms = terms;
 	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 }
