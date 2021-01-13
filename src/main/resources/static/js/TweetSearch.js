@@ -1,9 +1,9 @@
 
 $(document).ready(function(){
 
-$('.datepicker').datepicker({
-    clearBtn: true
-});
+//$('.datepicker').datepicker({
+//    clearBtn: true
+//});
 
   $( "#txtTo" ).prop( "disabled", true );
   $("#txtFrom").change(function(){

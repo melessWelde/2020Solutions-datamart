@@ -85,8 +85,7 @@ public class RecordServiceImpl implements RecordService {
 			while (itEntries.hasNext()) {
 				SyndEntry entry = itEntries.next();
 
-				if (StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
-						|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")) {
+				if (shouldCreateRecord(entry)) {
 					if (!linksFromDB.contains(entry.getLink())) {
 						recordsObjectforDB(media, records, entry);
 					}
@@ -148,8 +147,7 @@ public class RecordServiceImpl implements RecordService {
 
 				if ((null != entry.getPublishedDate() && DateUtils.isSameDay(entry.getPublishedDate(), date))
 						|| (null != entry.getUpdatedDate() && DateUtils.isSameDay(entry.getUpdatedDate(), date))) {
-					if (StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
-							|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")) {
+					if (shouldCreateRecord(entry)) {
 						if (!linksFromDB.contains(entry.getLink())) {
 							recordsObjectforDB(media, records, entry);
 						}
@@ -187,4 +185,10 @@ public class RecordServiceImpl implements RecordService {
 		return recordRepository.getAllNewsByContent(content);
 	}
 
+	private boolean shouldCreateRecord(SyndEntry entry) {
+		return StringUtils.containsIgnoreCase(entry.getTitle(), "tigray")
+				|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "tigray")
+				|| StringUtils.containsIgnoreCase(entry.getTitle(), "Ethiopia")
+				|| StringUtils.containsIgnoreCase(entry.getDescription().getValue(), "Ethiopia");
+	}
 }
