@@ -131,7 +131,6 @@ $.ajax({
                     { "data": "createdDate","width": "10%" },
                     { "data": "title" },
 					          { "data": "description" },
-                    { "data": "content" },
                     { 
                       "data": "link",
                       "render": function(data, type, row, meta){
