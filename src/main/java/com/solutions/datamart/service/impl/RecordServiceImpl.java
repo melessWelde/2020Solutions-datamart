@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +32,8 @@ import com.solutions.datamart.repository.RecordRepository;
 import com.solutions.datamart.service.MediaService;
 import com.solutions.datamart.service.RecordService;
 
+import static com.solutions.datamart.util.Constants.EXCEPTION_MESSAGE;
+
 @Service("recordService")
 @Transactional
 public class RecordServiceImpl implements RecordService {
@@ -50,7 +53,7 @@ public class RecordServiceImpl implements RecordService {
 		Optional<Property> property = propertyRepository.findByPropertyName("NEWS_GET_ALL");
 
 		try {
-			if (null != property && property.get().getPropertyValue().equals("ON")) {
+			if (property.isPresent() && property.get().getPropertyValue().equals("ON")) {
 				for (Media media : mediaList) {
 					logger.info(media.getName() + " all news crawling started");
 
@@ -69,7 +72,7 @@ public class RecordServiceImpl implements RecordService {
 			}
 
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			logger.error(EXCEPTION_MESSAGE, "NA","getAllMedias",e.getMessage(), e.getStackTrace() );
 		}
 	}
 
@@ -94,14 +97,13 @@ public class RecordServiceImpl implements RecordService {
 
 			recordRepository.saveAll(records);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(EXCEPTION_MESSAGE, "NA","createAllRecords",e.getMessage(), e.getStackTrace() );
 		}
 
 	}
 
 	private Iterator<SyndEntry> extractNewsFromRssFeed(Media media)
-			throws MalformedURLException, IOException, FeedException {
+			throws  IOException, FeedException {
 		URL url = new URL(media.getUrl());
 		HttpURLConnection httpcon = (HttpURLConnection) url.openConnection();
 		// Reading the feed
@@ -157,8 +159,7 @@ public class RecordServiceImpl implements RecordService {
 
 			recordRepository.saveAll(records);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error(EXCEPTION_MESSAGE, "NA","createAllRecords",e.getMessage(), e.getStackTrace() );
 		}
 
 	}

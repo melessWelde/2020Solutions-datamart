@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,9 @@ import com.solutions.datamart.model.FaceBookPost;
 import com.solutions.datamart.repository.FaceBookPostRepository;
 import com.solutions.datamart.service.FacebookService;
 
+import static com.solutions.datamart.util.Constants.EXCEPTION_MESSAGE;
+
+@Slf4j
 @Component
 public class FacebookServiceImp implements FacebookService {
 	@Autowired
@@ -63,9 +67,11 @@ public class FacebookServiceImp implements FacebookService {
 			}
 			fbPostRepository.saveAll(FBPosts);
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(EXCEPTION_MESSAGE,"","EXCEPTION_MESSAGE", e.getMessage(), e.getStackTrace() );
+
 		}
 	}
+
 
 	@Override
 	public List<FaceBookPost> getAllLatestFaceBookPosts() {

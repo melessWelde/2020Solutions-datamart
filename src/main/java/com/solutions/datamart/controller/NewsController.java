@@ -1,6 +1,7 @@
 package com.solutions.datamart.controller;
 
 import static com.solutions.datamart.util.Constants.EXCEPTION_MESSAGE;
+import static com.solutions.datamart.util.DateUtil.convertToDate;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -63,17 +64,5 @@ public class NewsController {
 		return null;
 	}
 
-	private Date convertToDate(String inputDate) {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = null;
-		try {
-			date = format.parse(inputDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println(date);
-		return date;
-	}
 
 }
