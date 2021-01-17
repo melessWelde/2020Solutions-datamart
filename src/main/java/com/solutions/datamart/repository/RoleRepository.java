@@ -7,6 +7,6 @@ import com.solutions.datamart.model.Role;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-	Role findByName(String role);
+    Role findByRole(String role);
 
 }

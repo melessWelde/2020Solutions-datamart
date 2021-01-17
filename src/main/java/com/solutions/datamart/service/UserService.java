@@ -7,7 +7,11 @@ import com.solutions.datamart.model.User;
 
 public interface UserService extends UserDetailsService {
 
-	User findByEmail(String email);
+    User findByEmail(String email);
 
-	User save(UserRegistrationDto registration);
+    User save(UserRegistrationDto registration);
+
+    String getLoggedInUser();
+
+    boolean isOldPasswordCorrect(String inputPassword, String dbPassword);
 }

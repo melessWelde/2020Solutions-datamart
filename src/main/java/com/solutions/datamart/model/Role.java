@@ -27,7 +27,7 @@ public class Role extends AuditUserDate implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private String name;
+	private String role;
 
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles", cascade = CascadeType.ALL)
 	@JsonIgnore
