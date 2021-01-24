@@ -8,11 +8,11 @@ service:
     fixedDelay: 1800000
     initialDelay: 100000
   facebook:
-    fixedDelay: 7200000
+    fixedDelay: 86400000
     initialDelay: 100000
   news:
-    fixedDelay: 60000
+    fixedDelay: 43200000
     initialDelay: 900000
   cache:
-    fixedDelay: 1620000
+    fixedDelay: 86400000
     initialDelay: 100000

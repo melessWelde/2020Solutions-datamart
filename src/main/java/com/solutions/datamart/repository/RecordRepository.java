@@ -14,19 +14,20 @@ import com.solutions.datamart.model.Record;
 public interface RecordRepository extends JpaRepository<Record, Long> {
 
 	@Query(value = "Select * FROM record order by created_date desc limit 100", nativeQuery = true)
-	public List<Record> getAllNews();
+	List<Record> getAllNews();
 
-	@Query(value = "Select * FROM record WHERE (title like :content OR description like :content) order by created_date desc limit 100", nativeQuery = true)
-	public List<Record> getAllNewsByContent(@Param("content") String content);
+	@Query(value = "Select * FROM record WHERE (title like %:content% OR description like %:content%) order by created_date desc limit 100", nativeQuery = true)
+	List<Record> getAllNewsByContent(@Param("content") String content);
 
-	@Query(value = "Select * FROM record WHERE created_date > :fromDate and created_date < :toDate order by created_date desc limit 100", nativeQuery = true)
-	public List<Record> getAllNewsByDate(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
+	@Query(value = "Select * FROM record WHERE created_date >= :fromDate and created_date <= :toDate order by created_date desc limit 100", nativeQuery = true)
+	List<Record> getAllNewsByDate(@Param("fromDate") Date fromDate, @Param("toDate") Date toDate);
 
-	@Query(value = "Select * FROM record WHERE (title like :content OR description like :content) AND created_date > :fromDate and created_date < :toDate order by created_dt desc limit 100", nativeQuery = true)
-	public List<Record> getAllNewsByContentAndDate(@Param("content") String content, @Param("fromDate") Date fromDate,
-			@Param("toDate") Date toDate);
+
+	@Query(value = "Select * FROM record WHERE (title like %:content% OR description like %:content%) AND created_date >= :fromDate and created_date <= :toDate order by created_dt desc limit 100", nativeQuery = true)
+	List<Record> getAllNewsByContentAndDate(@Param("content") String content, @Param("fromDate") Date fromDate,
+											@Param("toDate") Date toDate);
 
 	@Query(value = "select link FROM record WHERE media_id = :mediaId", nativeQuery = true)
-	public List<String> getNewsLinkforMedia(@Param("mediaId") long mediaId);
+	List<String> getNewsLinkforMedia(@Param("mediaId") long mediaId);
 
 }

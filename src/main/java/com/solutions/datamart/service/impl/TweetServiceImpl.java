@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.solutions.datamart.util.Constants.*;
+import static com.solutions.datamart.util.DataMartUtil.addDays;
+import static com.solutions.datamart.util.DataMartUtil.same;
 
 @Slf4j
 @Service("tweetService")
@@ -141,21 +143,48 @@ public class TweetServiceImpl implements TweetService {
 
     @Override
     public List<TweetEntity> getAllTweetsByNameHashAndDate(String userName, String hashText, Date from, Date toDate) {
+        if(same(from,toDate)){
+            return tweetRepository.getAllTweetsByNameHashAndDate(userName, hashText, from, addDays(toDate,1));
+        }
         return tweetRepository.getAllTweetsByNameHashAndDate(userName, hashText, from, toDate);
     }
 
     @Override
     public List<TweetEntity> getAllTweetsByUserAndDate(String userName, Date fromDate, Date toDate) {
+        if(same(fromDate,toDate)){
+            return tweetRepository.getAllTweetsByUserAndDate(userName, fromDate, addDays(toDate,1));
+        }
         return tweetRepository.getAllTweetsByUserAndDate(userName, fromDate, toDate);
     }
 
     @Override
     public List<TweetEntity> getAllTweetsByHashTagAndDate(String hashText, Date fromDate, Date toDate) {
+        if(same(fromDate,toDate)){
+            return tweetRepository.getAllTweetsByHashTagAndDate(hashText, fromDate, addDays(toDate,1));
+        }
         return tweetRepository.getAllTweetsByHashTagAndDate(hashText, fromDate, toDate);
     }
 
     @Override
     public List<TweetEntity> getAllTweetsByDate(Date fromDate, Date toDate) {
-    	 return tweetRepository.getAllTweetsByDate(fromDate, toDate);
+        if(same(fromDate,toDate)){
+            return tweetRepository.getAllTweetsByDate(fromDate, addDays(toDate,1));
+        }
+        return tweetRepository.getAllTweetsByDate(fromDate, toDate);
     }
+
+    @Override
+    public List<TweetEntity> getAllTweetsByHandleName(String handleName) {
+        return tweetRepository.getAllTweetsByHandleName(handleName);
+    }
+
+    @Override
+    public List<TweetEntity> getAllTweetsByHandleNameAndDate(String handleName, Date from, Date to) {
+        if(same(from,to)){
+            return tweetRepository.getAllTweetsByHandleNameAndDate(handleName,from,addDays(to,1));
+        }
+        return tweetRepository.getAllTweetsByHandleNameAndDate(handleName,from,to);
+    }
+
+
 }

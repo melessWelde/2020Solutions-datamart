@@ -115,10 +115,11 @@ console.log('searchPosts');
 var table = $('#tblTweets').DataTable();
 table.clear().draw();
 var username =  $("#txtUserName").val();
+var handlename =  $("#txtHandleName").val();
 var tagtext =  $("#txtHashTag").val();
 var fromdate =$("#txtFrom").val();
 var todate =$("#txtTo").val();
-var URL="/datamart/searchtweets?username="+username+"&tagtext="+tagtext+"&fromdate="+fromdate+"&todate="+todate;
+var URL="/datamart/searchtweets?username="+username+"&tagtext="+tagtext+"&fromdate="+fromdate+"&todate="+todate+"&handlename="+handlename;
  console.log(URL);
  
 $.ajax({
