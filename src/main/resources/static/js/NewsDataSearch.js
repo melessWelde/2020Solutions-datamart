@@ -32,6 +32,22 @@ $("#btnSearch").click(function(){
   searchNews();
 });
 
+function clearSearch(){
+
+console.log('clearSearch');
+
+var table = $('#tblNews').DataTable();
+table.clear().draw();
+
+var SearchKey =  $("#txtSearchKey").val('');
+var DateFrom =$("#txtFrom").val('');
+var DateTo =$("#txtTo").val('');
+}
+
+$("#btnClear").click(function(){
+  clearSearch();
+});
+
 loadLatestNews();
 });
 

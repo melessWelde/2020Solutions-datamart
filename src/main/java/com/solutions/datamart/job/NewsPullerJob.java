@@ -25,7 +25,7 @@ public class NewsPullerJob {
     private PropertyRepository propertyRepository;
 
     //@Scheduled(cron = "${service.news.cron}")
-    @Scheduled(fixedDelayString = "${service.news.fixedDelay}", initialDelay = 60000)
+   @Scheduled(fixedDelayString = "${service.news.fixedDelay}", initialDelay = 60000)
     public void saveNews() {
 
         if (propertyRepository.findByPropertyName("NEWS_JOB").isPresent()) {

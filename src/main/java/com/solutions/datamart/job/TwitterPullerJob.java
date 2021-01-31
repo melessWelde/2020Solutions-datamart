@@ -23,7 +23,7 @@ public class TwitterPullerJob {
     @Autowired
     private PropertyRepository propertyRepository;
 
-    @Scheduled(fixedDelayString = "${service.twitter.fixedDelay}", initialDelay = 1000)
+   @Scheduled(fixedDelayString = "${service.twitter.fixedDelay}", initialDelay = 1000)
     public void saveTweets() {
 
         if (propertyRepository.findByPropertyName("TWEETS_JOB").isPresent()) {

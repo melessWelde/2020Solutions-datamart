@@ -23,7 +23,7 @@ public class FBPostPullerJob {
     @Autowired
     private PropertyRepository propertyRepository;
 
-    @Scheduled(fixedDelayString = "${service.facebook.fixedDelay}", initialDelay = 60000)
+    //@Scheduled(fixedDelayString = "${service.facebook.fixedDelay}", initialDelay = 60000)
     public void saveFBPost() {
 
         if (propertyRepository.findByPropertyName("FACEBOOK_JOB").isPresent()) {

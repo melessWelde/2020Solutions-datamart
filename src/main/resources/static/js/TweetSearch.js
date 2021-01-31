@@ -37,6 +37,10 @@ $("#btnSearch").click(function(){
   searchTweets();
 });
 
+$("#btnClear").click(function(){
+  clearSearch();
+});
+
 loadLatestTweets();
 });
 
@@ -106,6 +110,18 @@ $.ajax({
   }
 });
 
+}
+function clearSearch(){
+
+console.log('clear');
+
+var table = $('#tblTweets').DataTable();
+table.clear().draw();
+var username =  $("#txtUserName").val('');
+var handlename =  $("#txtHandleName").val('');
+var tagtext =  $("#txtHashTag").val('');
+var fromdate =$("#txtFrom").val('');
+var todate =$("#txtTo").val('');
 }
 
 function searchTweets(){
