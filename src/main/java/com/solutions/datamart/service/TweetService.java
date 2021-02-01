@@ -24,4 +24,8 @@ public interface TweetService {
 
     List<TweetEntity> getAllTweetsByDate(Date fromDate, Date toDate);
 
+    List<TweetEntity> getAllTweetsByHandleName(String handleName);
+
+    List<TweetEntity> getAllTweetsByHandleNameAndDate(String handleName, Date from, Date to);
+
 }

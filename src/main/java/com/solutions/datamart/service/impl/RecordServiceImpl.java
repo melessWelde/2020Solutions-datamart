@@ -33,11 +33,14 @@ import com.solutions.datamart.service.MediaService;
 import com.solutions.datamart.service.RecordService;
 
 import static com.solutions.datamart.util.Constants.EXCEPTION_MESSAGE;
+import static com.solutions.datamart.util.DataMartUtil.addDays;
+import static com.solutions.datamart.util.DataMartUtil.same;
 
 @Service("recordService")
 @Transactional
 public class RecordServiceImpl implements RecordService {
 	private static final Logger logger = LogManager.getLogger(RecordServiceImpl.class);
+	public static final String EXTRA_STRING = "SyndContentImpl.mode=null\nSyndContentImpl.type=text/html\nSyndContentImpl.interface=interface com.rometools.rome.feed.synd.SyndContent\nSyndContentImpl.value=";
 
 	@Autowired
 	private RecordRepository recordRepository;
@@ -166,23 +169,35 @@ public class RecordServiceImpl implements RecordService {
 
 	@Override
 	public List<Record> getAllNews() {
-		return recordRepository.getAllNews();
+
+		List<Record> records =recordRepository.getAllNews();
+		return updateDesc(records);
+	}
+
+	private List<Record> updateDesc(List<Record> records) {
+		records.forEach(o -> o.setDescription(o.getDescription().replace(EXTRA_STRING,"")));
+		 return records;
 	}
 
 	@Override
 	public List<Record> getAllNewsByDate(Date fromDate, Date toDate) {
+		if(same(fromDate,toDate)){
+			return recordRepository.getAllNewsByDate(fromDate,addDays(toDate,1));
+		}
 		return recordRepository.getAllNewsByDate(fromDate, toDate);
 	}
 
 	@Override
 	public List<Record> getAllNewsByContentAndDate(String content, Date fromDate, Date toDate) {
-
+		if(same(fromDate,toDate)) {
+			return recordRepository.getAllNewsByContentAndDate(content, fromDate,addDays(toDate,1));
+		}
 		return recordRepository.getAllNewsByContentAndDate(content, fromDate, toDate);
+
 	}
 
 	@Override
 	public List<Record> getAllNewsByContent(String content) {
-
 		return recordRepository.getAllNewsByContent(content);
 	}
 

@@ -1,48 +1,46 @@
 package com.solutions.datamart.job;
 
-import java.util.Date;
-import java.util.Optional;
-
+import com.solutions.datamart.model.Property;
+import com.solutions.datamart.repository.PropertyRepository;
+import com.solutions.datamart.service.TweetService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import com.solutions.datamart.model.Property;
-import com.solutions.datamart.repository.PropertyRepository;
-import com.solutions.datamart.service.TweetService;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @Configuration
 @EnableScheduling
 public class TwitterPullerJob {
 
-	@Autowired
-	private TweetService tweetService;
+    @Autowired
+    private TweetService tweetService;
 
-	@Autowired
-	private PropertyRepository propertyRepository;
+    @Autowired
+    private PropertyRepository propertyRepository;
 
-	@Scheduled(fixedDelayString = "${service.twitter.fixedDelay}", initialDelay = 1000)
-	public void saveTweets() {
+   @Scheduled(fixedDelayString = "${service.twitter.fixedDelay}", initialDelay = 1000)
+    public void saveTweets() {
 
-		if (propertyRepository.findByPropertyName("TWEETS_JOB").isPresent()) {
-			Optional<Property> property = propertyRepository.findByPropertyName("TWEETS_JOB");
+        if (propertyRepository.findByPropertyName("TWEETS_JOB").isPresent()) {
+            Optional<Property> property = propertyRepository.findByPropertyName("TWEETS_JOB");
 
-			if (property.get().getPropertyValue().equals("ON")) {
+            if (property.get().getPropertyValue().equals("ON")) {
 
-				 log.info("Tweets batch has been started at: {}", new Date());
-				tweetService.createTweetsRecord();
-				 log.info("Tweets batch has been completed at: {}", new Date());
+                log.info("Tweets batch has been started at: {}", new Date());
+                tweetService.createTweetsRecord();
+                log.info("Tweets batch has been completed at: {}", new Date());
 
-			} else {
-				log.info("Batch has been disabled in the property table for the TWEETS_JOB as OFF ");
-			}
+            } else {
+                log.info("Batch has been disabled in the property table for the TWEETS_JOB as OFF ");
+            }
 
-		} else {
-			log.info("There has not been an entry for the TWEETS_JOB in the property table");
-		}
-	}
+        } else {
+            log.info("There has not been an entry for the TWEETS_JOB in the property table");
+        }
+    }
 }

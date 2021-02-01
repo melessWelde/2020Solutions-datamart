@@ -39,5 +39,6 @@ public class TweetEntity implements Serializable{
 	private String tweetUrl;
 
 	private String userName;
-	
+	//private String screenName;
+
 }

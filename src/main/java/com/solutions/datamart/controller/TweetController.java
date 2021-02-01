@@ -40,10 +40,11 @@ public class TweetController {
     }
 
     @PostMapping("/twitterProfiles")
-    public  List<TwitterUser>  saveUserInfos(@RequestBody UserProfile userProfile) {
-         return userProfileService.saveUserInfo(userProfile);
+    public List<TwitterUser> saveUserInfos(@RequestBody UserProfile userProfile) {
+        return userProfileService.saveUserInfo(userProfile);
 
     }
+
     @GetMapping("/tweets")
     public List<TweetEntity> getAllLatestTweets() {
         try {
@@ -56,23 +57,27 @@ public class TweetController {
     }
 
     @GetMapping("/searchtweets")
-    public List<TweetEntity> getAllTweetEntities(@RequestParam("username") String username, @RequestParam("tagtext") String tagtext, @RequestParam("fromdate") String fromdate, @RequestParam("todate") String todate) {
+    public List<TweetEntity> getAllTweetEntities(@RequestParam("username") String username, @RequestParam("tagtext") String tagtext, @RequestParam("fromdate") String fromdate, @RequestParam("todate") String todate, @RequestParam("handlename") String handleName) {
 
         try {
-            if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
+            if (StringUtils.isEmpty(handleName)  && !StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
                 return tweetService.getAllTweetsByNameHashAndDate(username, tagtext, convertToDate(fromdate), convertToDate(todate));
-            } else if (!StringUtils.isEmpty(username) && StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
+            } else if (StringUtils.isEmpty(handleName)  && !StringUtils.isEmpty(username) && StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
                 return tweetService.getAllTweetsByUserAndDate(username, convertToDate(fromdate), convertToDate(todate));
-            } else if (StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
+            } else if (StringUtils.isEmpty(handleName)  && StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
                 return tweetService.getAllTweetsByHashTagAndDate(tagtext, convertToDate(fromdate), convertToDate(todate));
-            } else if (!StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && StringUtils.isEmpty(fromdate) && StringUtils.isEmpty(todate)) {
+            } else if (StringUtils.isEmpty(handleName)  && !StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && StringUtils.isEmpty(fromdate) && StringUtils.isEmpty(todate)) {
                 return tweetService.getAllTweetsByNameAndHashTag(username, tagtext);
-            } else if (!StringUtils.isEmpty(username) && StringUtils.isEmpty(tagtext) && StringUtils.isEmpty(fromdate) && StringUtils.isEmpty(todate)) {
+            } else if (!StringUtils.isEmpty(username) && StringUtils.isEmpty(handleName)  &&  StringUtils.isEmpty(tagtext) && StringUtils.isEmpty(fromdate) && StringUtils.isEmpty(todate)) {
                 return tweetService.getAllTweetsByUser(username);
-            } else if (StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && StringUtils.isEmpty(fromdate) && StringUtils.isEmpty(todate)) {
+            } else if (StringUtils.isEmpty(handleName)  && StringUtils.isEmpty(username) && !StringUtils.isEmpty(tagtext) && StringUtils.isEmpty(fromdate) && StringUtils.isEmpty(todate)) {
                 return tweetService.getAllTweetsByHashTag(tagtext);
-            } else if (StringUtils.isEmpty(username) && StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
+            } else if (StringUtils.isEmpty(handleName)  && StringUtils.isEmpty(handleName)  && StringUtils.isEmpty(username) && StringUtils.isEmpty(tagtext) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
                 return tweetService.getAllTweetsByDate(convertToDate(fromdate), convertToDate(todate));
+            } else if (!StringUtils.isEmpty(handleName) && StringUtils.isEmpty(fromdate) && StringUtils.isEmpty(todate)) {
+                return tweetService.getAllTweetsByHandleName(handleName);
+            } else if (!StringUtils.isEmpty(handleName) && !StringUtils.isEmpty(fromdate) && !StringUtils.isEmpty(todate)) {
+                return tweetService.getAllTweetsByHandleNameAndDate(handleName, convertToDate(fromdate), convertToDate(todate));
             } else {
                 return tweetService.getAllLatestTweets();
             }
@@ -90,17 +95,19 @@ public class TweetController {
         try {
             hashTagService.saveHashTag(hashText);
         } catch (Exception e) {
-			log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
+            log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
         }
     }
-	@PostMapping("/hashtags")
-	public void saveHashTags(@RequestBody HashTagRequest hashText) {
-		try {
-			hashTagService.saveHashTags(hashText);
-		} catch (Exception e) {
-			log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
-		}
-	}
+
+    @PostMapping("/hashtags")
+    public void saveHashTags(@RequestBody HashTagRequest hashText) {
+        try {
+            hashTagService.saveHashTags(hashText);
+        } catch (Exception e) {
+            log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
+        }
+    }
+
     @GetMapping("/hastags")
     public List<HashTag> getAllHashTags() {
         try {
@@ -116,7 +123,7 @@ public class TweetController {
         try {
             hashTagService.deleteHashTag(hashTag.getId());
         } catch (Exception e) {
-			log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
+            log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
         }
     }
 
@@ -125,9 +132,9 @@ public class TweetController {
         try {
             return userProfileService.saveUserProfile(username);
         } catch (Exception e) {
-			log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
+            log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
         }
-		return new ArrayList<>();
+        return new ArrayList<>();
     }
 
     @PostMapping("/twitterUsers")
@@ -135,9 +142,9 @@ public class TweetController {
         try {
             return userProfileService.saveUserProfile(userProfile);
         } catch (Exception e) {
-			log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
+            log.error(EXCEPTION_MSG, e.getMessage(), e.getCause(), e);
         }
-		return new ArrayList<>();
+        return new ArrayList<>();
     }
 
     @DeleteMapping("/deleteProfile")
